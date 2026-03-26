@@ -1,0 +1,102 @@
+# Plan de Ejecución: Hackathon Preven-Score - Radar de Riesgo Predictivo
+
+## 1. Misión del desafío
+**Objetivo:** construir una solución que priorice empresas según riesgo preventivo estimado, usando variables históricas, operacionales, contextuales y textuales.
+
+**Entregables clave:**
+1. Un dashboard, ranking o panel operativo.
+2. Un script o lógica que calcule el Preven-Score.
+3. Una explicación simple de por qué ciertas empresas suben en prioridad.
+
+---
+
+## 2. Toolchain recomendado
+
+| Categoría | Herramienta/Librería | Propósito | Nivel |
+| :--- | :--- | :--- | :--- |
+| Lenguaje | Python 3.10+ | Lógica de score, limpieza y prototipo | Requerido |
+| Datos | Pandas | Carga, cruces y preparación de tablas | Requerido |
+| Visualización | Plotly / Streamlit / Power BI | Dashboard o vista priorizada | Requerido |
+| ML | scikit-learn | Árboles, regresión logística, scoring base | Recomendado |
+| NLP | spaCy / sklearn / reglas | Clasificación simple o análisis de textos | Recomendado |
+| App | Streamlit / Flask / React | MVP navegable | Opcional |
+
+---
+
+## 3. Estrategia incremental
+
+### Fase 1: Entender el riesgo (Horas 0-2)
+**Objetivo:** construir una definición inicial del score.
+- Revisar variables disponibles.
+- Identificar señales de riesgo duras y blandas.
+- Proponer fórmula inicial o baseline.
+
+Preguntas guía:
+- ¿Qué variables aumentan el riesgo de forma más evidente?
+- ¿Qué factores contextuales pueden amplificar el riesgo?
+- ¿Cómo distinguir una empresa silenciosa pero riesgosa?
+
+### Fase 2: Integrar datos (Horas 2-4)
+**Objetivo:** cruzar datasets y generar una vista maestra por empresa.
+- Unir empresa + clima + comentarios + agenda.
+- Crear features derivadas.
+- Manejar faltantes y ruido.
+
+Ideas de features:
+- días sin capacitación
+- hallazgos abiertos por 100 trabajadores
+- tendencia de accidentabilidad
+- cantidad de comentarios críticos recientes
+- sensibilidad del rubro a lluvia
+
+### Fase 3: Score inicial explicable (Horas 4-6)
+**Objetivo:** generar un primer ranking útil.
+- Fórmula ponderada o modelo simple.
+- Score 0-100.
+- Semáforo de riesgo.
+- Top variables explicativas.
+
+Ejemplo de lógica:
+- Si hallazgos abiertos > umbral y días sin capacitación altos, subir score.
+- Si rubro = construcción y lluvia actual > umbral, subir score.
+- Si NLP detecta señales de caos, negligencia o incumplimiento, subir score.
+
+### Fase 4: Panel operativo (Horas 6-8)
+**Objetivo:** mostrar prioridades accionables.
+- Ranking de empresas
+- Filtros por rubro, comuna o criticidad
+- Vista detalle por empresa
+- Recomendación sugerida
+
+### Fase 5: Simulación / bonus (Horas 8+)
+**Objetivo:** mostrar valor adicional.
+- ¿Qué pasa si se programa una capacitación?
+- ¿Qué pasa si bajan hallazgos abiertos?
+- ¿Qué empresas cambiarían de prioridad mañana si llueve?
+
+---
+
+## 4. KPI sugeridos
+- % de empresas críticas detectadas en top N
+- reducción esperada de visitas poco prioritarias
+- lead time de intervención preventiva
+- cobertura de empresas con riesgo alto
+- claridad / explicabilidad del score
+
+---
+
+## 5. Recomendaciones de implementación
+- Partir con un baseline interpretable antes de usar modelos complejos.
+- Mantener trazabilidad del score: el experto debe entender por qué una empresa sube o baja.
+- Diseñar el dashboard como herramienta de decisión, no solo de visualización.
+- Pensar el dato textual como señal complementaria, no necesariamente como único motor del score.
+
+---
+
+## 6. Artefactos del pack
+- `desafio_preven_score.md`: brief del desafío
+- `empresas_riesgo_historico.*`: dataset maestro histórico
+- `comentarios_inspecciones.*`: textos de inspección para NLP
+- `contexto_climatico_operacional.*`: factores contextuales del día
+- `agenda_prevencionista_mock.*`: agenda base del experto
+- `ground_truth_prevenscore_uso_jurado.*`: referencia interna para validación o demo

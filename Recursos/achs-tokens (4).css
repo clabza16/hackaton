@@ -1,0 +1,269 @@
+/* Generated from tokens/achs-tokens-v2.json — ACHS Design System */
+
+#achs-ui {
+  --color-brand-brand-seguro-primary: #27933E;
+  --color-brand-brand-seguro-secondary: #13C045;
+  --color-brand-brand-seguro-complementary1: #81DB77;
+  --color-brand-brand-seguro-complementary2: #27933E;
+  --color-brand-brand-seguro-text: #004C14;
+  --color-brand-brand-seguro-second: #004C14;
+  --color-brand-brand-seguro-disable: #66D495;
+  --color-brand-brand-seguro-light: #CCF1DC;
+  --color-brand-brand-salud-primary: #2B6BDC;
+  --color-brand-brand-salud-secondary: #348FFF;
+  --color-brand-brand-salud-complementary1: #96C5FA;
+  --color-brand-brand-salud-complementary2: #2B6BDC;
+  --color-brand-brand-salud-text: #002A6C;
+  --color-brand-brand-salud-second: #002A6C;
+  --color-brand-brand-salud-disable: #85BCFF;
+  --color-brand-brand-salud-light: #D6E5F9;
+  --color-brand-brand-servicios-primary: #4B4196;
+  --color-brand-brand-servicios-secondary: #8C73FF;
+  --color-brand-brand-servicios-complementary1: #B8AEFF;
+  --color-brand-brand-servicios-complementary2: #614BF9;
+  --color-brand-brand-servicios-text: #1E117C;
+  --color-brand-brand-servicios-second: #1E117C;
+  --color-brand-brand-servicios-disable: #BAABFF;
+  --color-brand-brand-servicios-light: #DFDBFE;
+  --color-text-base: #1F2937;
+  --color-text-title: #5F5F5F;
+  --color-text-titleDark: #373737;
+  --color-text-paragraph: #4E4E4E;
+  --color-text-paragraphLight: #5F5F5F;
+  --color-surface-surface-background-seguro: #E6F7E4;
+  --color-surface-surface-background-salud: #EAF3FE;
+  --color-surface-surface-background-servicios: #F1EFFF;
+  --color-semantic-semantic-neutral-light: #D6E5F9;
+  --color-semantic-semantic-neutral-main: #8382EE;
+  --color-semantic-semantic-neutral-dark: #2B6BDC;
+  --color-semantic-semantic-positive-light: #D4E9D8;
+  --color-semantic-semantic-positive-main: #7DBE8B;
+  --color-semantic-semantic-positive-dark: #27933E;
+  --color-semantic-semantic-warning-light: #EBE1BC;
+  --color-semantic-semantic-warning-main: #EBD78D;
+  --color-semantic-semantic-warning-dark: #EAC52F;
+  --color-semantic-semantic-negative-light: #FED0CB;
+  --color-semantic-semantic-negative-main: #FFA399;
+  --color-semantic-semantic-negative-dark: #FF7466;
+  --color-semantic-semantic-disabled-light: #F4F4F4;
+  --color-semantic-semantic-disabled-main: #C1C1C1;
+  --color-semantic-semantic-disabled-dark: #787878;
+  --font-heading: ACHSNuevaSerif-Medium;
+  --font-body: ACHSNuevaSans-Regular;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+}
+
+/* Base Button Styles */
+#achs-ui .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 9999px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#achs-ui .btn--primary {
+  background-color: var(--color-brand-brand-seguro-primary);
+  color: white;
+}
+
+#achs-ui .btn--primary:hover {
+  background-color: var(--color-brand-brand-seguro-secondary);
+}
+
+#achs-ui .btn--primary:disabled {
+  background-color: var(--color-brand-brand-seguro-disable);
+  cursor: not-allowed;
+}
+
+#achs-ui .btn--secondary {
+  background-color: var(--color-brand-brand-salud-primary);
+  color: white;
+}
+
+#achs-ui .btn--secondary:hover {
+  background-color: var(--color-brand-brand-salud-secondary);
+}
+
+#achs-ui .btn--ghost {
+  background-color: transparent;
+  border: 2px solid var(--color-brand-brand-seguro-primary);
+  color: var(--color-brand-brand-seguro-primary);
+}
+
+#achs-ui .btn--ghost:hover {
+  background-color: var(--color-brand-brand-seguro-light);
+}
+
+#achs-ui .btn--sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+#achs-ui .btn--lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+/* Card Styles */
+#achs-ui .card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease;
+}
+
+#achs-ui .card:hover {
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.12);
+}
+
+#achs-ui .card__header {
+  margin-bottom: 1rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--color-text-titleDark);
+}
+
+#achs-ui .card__body {
+  color: var(--color-text-paragraph);
+  line-height: 1.6;
+}
+
+/* Table Styles */
+#achs-ui .table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+#achs-ui .table th {
+  background-color: #f3f4f6;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  color: var(--color-text-titleDark);
+}
+
+#achs-ui .table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  color: var(--color-text-paragraph);
+}
+
+#achs-ui .table tr:hover td {
+  background-color: #f9fafb;
+}
+
+/* Tabs Styles */
+#achs-ui .tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+#achs-ui .tabs__item {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-paragraphLight);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#achs-ui .tabs__item--active {
+  color: var(--color-brand-brand-seguro-primary);
+  border-bottom-color: var(--color-brand-brand-seguro-primary);
+}
+
+#achs-ui .tabs__item:hover {
+  color: var(--color-brand-brand-seguro-primary);
+}
+
+/* Form Styles */
+#achs-ui .form-field {
+  margin-bottom: 1.25rem;
+}
+
+#achs-ui .form-field__label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-titleDark);
+}
+
+#achs-ui .form-field__input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-base);
+  transition: border-color 0.2s ease;
+}
+
+#achs-ui .form-field__input:focus {
+  outline: none;
+  border-color: var(--color-brand-brand-seguro-primary);
+}
+
+#achs-ui .form-field__input--error {
+  border-color: var(--color-semantic-semantic-negative-dark);
+}
+
+#achs-ui .form-field__helper {
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  color: var(--color-text-paragraphLight);
+}
+
+#achs-ui .form-field__error {
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  color: var(--color-semantic-semantic-negative-dark);
+}
+
+/* Badge Styles */
+#achs-ui .badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+#achs-ui .badge--success {
+  background-color: var(--color-semantic-semantic-positive-light);
+  color: var(--color-semantic-semantic-positive-dark);
+}
+
+#achs-ui .badge--warning {
+  background-color: var(--color-semantic-semantic-warning-light);
+  color: var(--color-semantic-semantic-warning-dark);
+}
+
+#achs-ui .badge--error {
+  background-color: var(--color-semantic-semantic-negative-light);
+  color: var(--color-semantic-semantic-negative-dark);
+}

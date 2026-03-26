@@ -1,0 +1,9 @@
+slot_hora,empresa_id,empresa_nombre,motivo_actual,prioridad_actual,zona
+9:00,101,Constructora Andina,seguimiento hallazgos,Media,Santiago
+10:00,102,Metalúrgica Renca,visita programada,Alta,Renca
+11:00,103,Logística Ruta Sur,seguimiento hallazgos,Media,San Bernardo
+12:00,104,Servicios Clínicos Oriente,revisión documental,Media,Providencia
+13:00,105,Agroindustrial Valle Verde,seguimiento hallazgos,Baja,Paine
+14:00,106,Minería Cordillera,revisión documental,Media,Las Condes
+15:00,107,Bodega Central Express,capacitacion,Media,Quilicura
+16:00,108,Obras Civiles Mapocho,seguimiento hallazgos,Baja,Maipú
