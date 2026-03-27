@@ -6,7 +6,8 @@ import AgendaView from './components/AgendaView';
 import SimulatorView from './components/SimulatorView';
 import HistoricoView from './components/HistoricoView';
 import InfoView from './components/InfoView';
-import { LayoutDashboard, CalendarDays, FlaskConical, TrendingUp, Info } from 'lucide-react';
+import SettingsView from './components/SettingsView';
+import { LayoutDashboard, CalendarDays, FlaskConical, TrendingUp, Info, Settings } from 'lucide-react';
 import './styles/achs-tokens.css';
 import './index.css';
 
@@ -16,8 +17,7 @@ function App() {
       <div className="app-container">
         <aside className="sidebar">
           <div className="sidebar-logo">
-            <div className="logo-icon">PR</div>
-            <div className="logo-text">Preven-Score</div>
+            <img src="/logo-achs.png" alt="ACHS Seguro Laboral" style={{ maxWidth: '100%', height: 'auto' }} />
           </div>
           <nav className="sidebar-nav">
             <NavLink to="/" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
@@ -35,6 +35,9 @@ function App() {
             <NavLink to="/info" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
               <Info size={20}/> <span>Cálculo del Score</span>
             </NavLink>
+            <NavLink to="/config" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+              <Settings size={20}/> <span>Configuraciones</span>
+            </NavLink>
           </nav>
         </aside>
         <main className="main-content">
@@ -45,6 +48,7 @@ function App() {
             <Route path="/historico" element={<HistoricoView />} />
             <Route path="/simulator" element={<SimulatorView />} />
             <Route path="/info" element={<InfoView />} />
+            <Route path="/config" element={<SettingsView />} />
           </Routes>
         </main>
       </div>

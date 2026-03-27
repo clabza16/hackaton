@@ -61,13 +61,41 @@ class PrevenScoreModel:
         y = df_feat["accidente_ocurrio_30d"].fillna(0).astype(int)
         self.ml_model.fit(X, y)
 
-    def calculate_scores(self, df_actual: pd.DataFrame, contexto: pd.DataFrame, comentarios: pd.DataFrame):
+    def get_segmento(self, dotacion):
+        if dotacion is None or dotacion == 0:
+            return "Independiente"
+        if dotacion <= 10:
+            return "Micro"
+        if dotacion <= 24:
+            return "Micro"
+        if dotacion <= 99:
+            return "Pequeña"
+        if dotacion <= 299:
+            return "Mediana"
+        if dotacion <= 1000:
+            return "Mediana +"
+        return "Grande"
+
+    def calculate_scores(self, df_actual: pd.DataFrame, contexto: pd.DataFrame, comentarios: pd.DataFrame, latest_only: bool = True, weights: dict = None):
         """Calculate final Preven-Score for the current state."""
+        # Default weights if not provided
+        if not weights:
+            weights = {
+                "layers": {"ml": 40.0, "operacional": 25.0, "nlp": 20.0, "contextual": 15.0},
+                "operacional": {"hallazgos": 0.4, "capacitacion": 0.2, "visita": 0.2, "accidentabilidad": 0.2},
+                "contextual": {"alerta": 0.4, "evento": 0.2, "congestion": 0.2, "lluvia": 0.2}
+            }
+
+        w_layers = weights.get("layers", {})
+        w_op = weights.get("operacional", {})
+        w_ctx = weights.get("contextual", {})
+
         # Merge contexto to get weather and alerts
         df = df_actual.copy()
         
         # Deduplicate to have ONE row per empresa right now (take the latest if multiple)
-        df = df.sort_values("fecha").groupby("empresa_id").last().reset_index()
+        if latest_only:
+            df = df.sort_values("fecha").groupby("empresa_id").last().reset_index()
         
         if not contexto.empty:
             df = df.merge(contexto[["empresa_id", "lluvia_mm", "temperatura_c", "alerta_meteorologica", 
@@ -104,7 +132,12 @@ class PrevenScoreModel:
             dias_vis = min(row.get("dias_desde_ultima_visita_prevencion", 0), 180) / 180.0 * 100
             acc_12m = min(row.get("accidentabilidad_12m", 0) * 10, 100) # scaling
             
-            score_op = (ratio_hallazgos * 0.4 + dias_cap * 0.2 + dias_vis * 0.2 + acc_12m * 0.2)
+            score_op = (
+                ratio_hallazgos * w_op.get("hallazgos", 0.4) + 
+                dias_cap * w_op.get("capacitacion", 0.2) + 
+                dias_vis * w_op.get("visita", 0.2) + 
+                acc_12m * w_op.get("accidentabilidad", 0.2)
+            )
             
             # NLP Score (0-100)
             score_nlp = nlp_scores.get(eid, 0)
@@ -119,14 +152,19 @@ class PrevenScoreModel:
             lluvia_factor = row.get("lluvia_x_sensibilidad", 0)
             lluvia_score = min(lluvia_factor * 5, 100) # scale
             
-            score_ctx = (alerta * 0.4 + evento * 0.2 + cong_val * 0.2 + lluvia_score * 0.2)
+            score_ctx = (
+                alerta * w_ctx.get("alerta", 0.4) + 
+                evento * w_ctx.get("evento", 0.2) + 
+                cong_val * w_ctx.get("congestion", 0.2) + 
+                lluvia_score * w_ctx.get("lluvia", 0.2)
+            )
             
             # Capa 2: Final composite
             preven_score = (
-                ml_prob * 40          # 40% weight
-                + (score_op / 100.0) * 25   # 25% weight
-                + (score_nlp / 100.0) * 20  # 20% weight
-                + (score_ctx / 100.0) * 15  # 15% weight
+                ml_prob * w_layers.get("ml", 40.0)
+                + (score_op / 100.0) * w_layers.get("operacional", 25.0)
+                + (score_nlp / 100.0) * w_layers.get("nlp", 20.0)
+                + (score_ctx / 100.0) * w_layers.get("contextual", 15.0)
             )
             
             record = {
@@ -134,13 +172,14 @@ class PrevenScoreModel:
                 "empresa_nombre": row.get("empresa_nombre"),
                 "rubro": row.get("rubro"),
                 "comuna": row.get("comuna"),
+                "segmento": self.get_segmento(dotacion),
                 "preven_score": round(preven_score, 1),
                 "componentes": {
                     "ml_prob_raw": round(ml_prob, 3),
-                    "ml": round(ml_prob * 40, 1),
-                    "operacional": round((score_op / 100.0) * 25, 1),
-                    "nlp": round((score_nlp / 100.0) * 20, 1),
-                    "contextual": round((score_ctx / 100.0) * 15, 1)
+                    "ml": round(ml_prob * w_layers.get("ml", 40.0), 1),
+                    "operacional": round((score_op / 100.0) * w_layers.get("operacional", 25.0), 1),
+                    "nlp": round((score_nlp / 100.0) * w_layers.get("nlp", 20.0), 1),
+                    "contextual": round((score_ctx / 100.0) * w_layers.get("contextual", 15.0), 1)
                 },
                 "metricas": {
                     "hallazgos_abiertos": hallazgos,
@@ -179,4 +218,6 @@ class PrevenScoreModel:
                 
             scores.append(record)
             
-        return sorted(scores, key=lambda x: x["preven_score"], reverse=True)
+        if latest_only:
+            return sorted(scores, key=lambda x: x["preven_score"], reverse=True)
+        return scores

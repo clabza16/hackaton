@@ -1,11 +1,4 @@
-- Hay algunos caracteres especiales en los nombres de las empresas que no se están mostrando correctamente (tildes, ñ, etc)
-- agrega una pestaña informativa detallando cómo se calcula el score
-- crea un histórico del score de las empresas por mes y que exista un panel para comparar el score de las empresas por mes
-- ponte en la situación en que hay n expertos, donde cada experto tiene sus empresas y que en la vista de agenda se pueda filtrar por experto para visualizar solo las empresas del o los expertos filtrados
-- agrega un placeholder en cada campo de cálculo del score para que muestre su definición
-- En el simulador, si es que simulo una empresa sin completar las pestañas extra, me lanza un score mas bajo del que promedio. Si es que simulo la empresa sin completar las pestañas, deberia lanzar el mismo score que si lo hubiese completado con los datos por defecto
-- quiero agregar una zona a cada empresa, para que se pueda filtrar por zona y ver solo las empresas de esa zona y que los datos meteorológicos salgan de la web de la direccion meteorologica de chile
-- quiero ver el histórico de inspecciones de cada empresa y que se pueda ver el detalle de cada inspección
-- considera que inspector = experto
-- ponle filtros al dashbord con un orden descendente en el ranking
-- En la acción recomendada entrega más detalles del por qué y agrega información de contacto (crea un csv con los datos de contacto de cada empresa, nombre, email, teléfono, etc)
+- la zona de todas las empresas es Metropolitana. Cambia el filtro de zona por comuna
+- en empresas_riesgo_historico_v2.csv encuentras los indicadores históricos por fecha de cada empresa. Usa esa información para calcular el score histórico de cada empresa y almacenarlo para mostrarlo en el dashboard histórico
+- En el dashboard panel general debe mostrarse el score calculado de la última fecha subida en la base de datos
+- El experto en prevención debe poder ver el detalle de los indicadores que componen el score de cada empresa

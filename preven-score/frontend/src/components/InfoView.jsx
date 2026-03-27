@@ -44,23 +44,60 @@ export default function InfoView() {
         </div>
       </div>
       
+      <div className="card mt-6">
+        <h2 className="card-title flex items-center gap-2"><CalcIcon className="text-[var(--success)]"/> Resumen de Ponderación Final</h2>
+        <div className="overflow-x-auto mt-4">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-gray-50 text-left">
+                <th className="p-3 border">Componente</th>
+                <th className="p-3 border">Peso</th>
+                <th className="p-3 border">Variables Clave</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="p-3 border font-semibold">Capa ML (Gradient Boosting)</td>
+                <td className="p-3 border">40%</td>
+                <td className="p-3 border text-gray-600">Dotación, Accidentabilidad histórica, Turnos críticos, Hallazgos previos.</td>
+              </tr>
+              <tr>
+                <td className="p-3 border font-semibold">Riesgo Operacional</td>
+                <td className="p-3 border">25%</td>
+                <td className="p-3 border text-gray-600">Ratio Hallazgos/Dotación (40%), Brecha Capacitación (20%), Brecha Visita (20%), Accidentabilidad 12M (20%).</td>
+              </tr>
+              <tr>
+                <td className="p-3 border font-semibold">Análisis de Texto (NLP)</td>
+                <td className="p-3 border">20%</td>
+                <td className="p-3 border text-gray-600">Detección de negligencia, abandono, desorden grave o falta de EPP en observaciones.</td>
+              </tr>
+              <tr>
+                <td className="p-3 border font-semibold">Contexto y Clima</td>
+                <td className="p-3 border">15%</td>
+                <td className="p-3 border text-gray-600">Alertas meteorológicas (40%), Lluvia x Sensibilidad (20%), Congestión Operacional (20%), Eventos Masivos (20%).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div className="card mt-6 bg-[var(--danger-light)] border border-[var(--danger)]">
         <h2 className="card-title text-[var(--danger)]">Rango de Decisiones (Semáforo)</h2>
-        <div className="grid grid-cols-3 gap-4 text-center mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mt-4">
           <div className="p-4 bg-white rounded-xl shadow-sm border border-red-200">
             <div className="text-2xl font-black text-[var(--danger)]">&gt;= 65</div>
             <div className="font-bold text-gray-700">Riesgo Alto</div>
-            <div className="text-sm text-gray-500 mt-2">Requiere visita física inmediata.</div>
+            <div className="text-sm text-gray-500 mt-2">Prioridad 1: Visita técnica presencial obligatoria dentro de las primeras 24 horas.</div>
           </div>
           <div className="p-4 bg-white rounded-xl shadow-sm border border-yellow-200">
             <div className="text-2xl font-black text-[var(--warning)]">45 a 64</div>
             <div className="font-bold text-gray-700">Riesgo Medio</div>
-            <div className="text-sm text-gray-500 mt-2">Llamado, seguimiento o capacitaciones urgentes.</div>
+            <div className="text-sm text-gray-500 mt-2">Prioridad 2: Contacto telefónico preventivo, revisión remota de hallazgos o agendamiento de capacitación.</div>
           </div>
           <div className="p-4 bg-white rounded-xl shadow-sm border border-green-200">
             <div className="text-2xl font-black text-[var(--success)]">&lt; 45</div>
             <div className="font-bold text-gray-700">Riesgo Bajo</div>
-            <div className="text-sm text-gray-500 mt-2">Monitoreo estándar.</div>
+            <div className="text-sm text-gray-500 mt-2">Prioridad 3: Mantención de estándares, seguimiento administrativo mensual.</div>
           </div>
         </div>
       </div>

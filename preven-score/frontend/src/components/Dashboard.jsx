@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader, ArrowDown, ArrowUp, Filter } from 'lucide-react';
+import { Loader, ArrowDown, ArrowUp, Filter, MapPin, Briefcase, Users, ShieldCheck } from 'lucide-react';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [ranking, setRanking] = useState([]);
   const [resumen, setResumen] = useState(null);
   const [loading, setLoading] = useState(true);
   
-  const [selectedZona, setSelectedZona] = useState('Todas');
+  const [selectedComuna, setSelectedComuna] = useState('Todas');
+  const [selectedRubro, setSelectedRubro] = useState('Todas');
+  const [selectedSegmento, setSelectedSegmento] = useState('Todos');
+  const [selectedExperto, setSelectedExperto] = useState('Todos');
   const [sortDesc, setSortDesc] = useState(true);
 
   useEffect(() => {
@@ -32,11 +36,23 @@ export default function Dashboard() {
 
   if (loading) return <div className="p-8"><Loader className="animate-spin" /> Cargando datos...</div>;
 
-  const zonas = ['Todas', ...new Set(ranking.map(e => e.zona).filter(z => z))];
+  const comunas = ['Todas', ...new Set(ranking.map(e => e.comuna).filter(c => c))];
+  const rubros = ['Todas', ...new Set(ranking.map(e => e.rubro).filter(r => r))];
+  const segmentos = ['Todos', ...new Set(ranking.map(e => e.segmento).filter(s => s))];
+  const expertos = ['Todos', ...new Set(ranking.map(e => e.experto_asignado).filter(x => x))];
   
   let filteredRanking = [...ranking];
-  if (selectedZona !== 'Todas') {
-    filteredRanking = filteredRanking.filter(e => e.zona === selectedZona);
+  if (selectedComuna !== 'Todas') {
+    filteredRanking = filteredRanking.filter(e => e.comuna === selectedComuna);
+  }
+  if (selectedRubro !== 'Todas') {
+    filteredRanking = filteredRanking.filter(e => e.rubro === selectedRubro);
+  }
+  if (selectedSegmento !== 'Todos') {
+    filteredRanking = filteredRanking.filter(e => e.segmento === selectedSegmento);
+  }
+  if (selectedExperto !== 'Todos') {
+    filteredRanking = filteredRanking.filter(e => e.experto_asignado === selectedExperto);
   }
   
   if (!sortDesc) {
@@ -77,25 +93,66 @@ export default function Dashboard() {
 
       {/* Main Table */}
       <div className="card table-container">
-        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px"}}>
-          <h2 className="card-title" style={{margin: 0}}>Ranking Priorizado de Intervención</h2>
-          <div style={{display: "flex", gap: "16px"}}>
-            <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-              <Filter size={16} className="text-gray-500" />
-              <select 
-                className="border rounded p-1"
-                value={selectedZona}
-                onChange={e => setSelectedZona(e.target.value)}
-              >
-                {zonas.map(z => <option key={z} value={z}>{z}</option>)}
-              </select>
+        <div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "20px", flexWrap: "wrap", gap: "16px"}}>
+          <div>
+            <h2 className="card-title" style={{margin: 0}}>Ranking Priorizado de Intervención</h2>
+            <p style={{fontSize: "0.85rem", color: "#64748b", marginTop: "4px"}}>Utiliza los filtros inteligentes para segmentar el riesgo operacional.</p>
+          </div>
+          
+          <div style={{display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap"}}>
+            <div className="filter-container">
+              <div className="filter-group">
+                <MapPin size={14} className="text-gray-400" />
+                <span className="filter-label">Comuna</span>
+                <select className="filter-select" value={selectedComuna} onChange={e => setSelectedComuna(e.target.value)}>
+                  {comunas.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="filter-group">
+                <Briefcase size={14} className="text-gray-400" />
+                <span className="filter-label">Rubro</span>
+                <select className="filter-select" value={selectedRubro} onChange={e => setSelectedRubro(e.target.value)}>
+                  {rubros.map(r => <option key={r} value={r}>{r}</option>)}
+                </select>
+              </div>
+              <div className="filter-group">
+                <Users size={14} className="text-gray-400" />
+                <span className="filter-label">Segmento</span>
+                <select className="filter-select" value={selectedSegmento} onChange={e => setSelectedSegmento(e.target.value)}>
+                  {segmentos.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+              <div className="filter-group">
+                <ShieldCheck size={14} className="text-gray-400" />
+                <span className="filter-label">Experto</span>
+                <select className="filter-select" value={selectedExperto} onChange={e => setSelectedExperto(e.target.value)}>
+                  {expertos.map(x => <option key={x} value={x}>{x}</option>)}
+                </select>
+              </div>
             </div>
+
             <button 
               onClick={() => setSortDesc(!sortDesc)}
-              className="flex items-center gap-2 border rounded p-1 px-3 bg-gray-50 hover:bg-gray-100"
+              style={{
+                display: "flex", 
+                alignItems: "center", 
+                gap: "8px", 
+                backgroundColor: "white", 
+                border: "1px solid #e2e8f0", 
+                padding: "8px 16px", 
+                borderRadius: "12px", 
+                fontSize: "0.875rem", 
+                fontWeight: 600,
+                color: "#475569",
+                cursor: "pointer",
+                boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                transition: "all 0.2s"
+              }}
+              onMouseOver={e => e.currentTarget.style.backgroundColor = "#f8fafc"}
+              onMouseOut={e => e.currentTarget.style.backgroundColor = "white"}
             >
               {sortDesc ? <ArrowDown size={16} /> : <ArrowUp size={16} />} 
-              {sortDesc ? "Orden Descendente" : "Orden Ascendente"}
+              {sortDesc ? "Mayor Riesgo" : "Menor Riesgo"}
             </button>
           </div>
         </div>
@@ -103,12 +160,13 @@ export default function Dashboard() {
         <table>
           <thead>
             <tr>
-              <th>#</th>
-              <th>Empresa</th>
-              <th>Zona / Comuna</th>
-              <th style={{width: "250px"}}>Preven-Score</th>
-              <th>Clima (MeteoChile)</th>
-              <th>Recomendación</th>
+              <th title="Posición en el ranking de prioridad">#</th>
+              <th title="Nombre de la empresa adherida">Empresa</th>
+              <th title="Ubicación geográfica de la faena">Comuna</th>
+              <th title="Segmentación por dotación">Segmento</th>
+              <th style={{width: "250px"}} title="Puntaje de riesgo calculado (0-100)">Preven-Score</th>
+              <th title="Datos climáticos en tiempo vivo (MeteoChile/OpenMeteo)">Clima (MeteoChile)</th>
+              <th title="Sugerencia de intervención inmediata">Recomendación</th>
             </tr>
           </thead>
           <tbody>
@@ -126,9 +184,9 @@ export default function Dashboard() {
                   <div style={{fontSize: "0.8rem", color: "#6b7280"}}>{emp.rubro} • {emp.experto_asignado}</div>
                 </td>
                 <td>
-                  <div style={{fontWeight: 500}}>{emp.zona}</div>
-                  <div style={{fontSize: "0.8rem", color: "#6b7280"}}>{emp.comuna}</div>
+                  <div style={{fontWeight: 500}}>{emp.comuna}</div>
                 </td>
+                <td style={{fontSize: "0.85rem", whiteSpace: "nowrap"}}>{emp.segmento}</td>
                 <td>
                   <div style={{display: "flex", alignItems: "center", gap: "8px", fontWeight: "bold"}}>
                     <div className={`score-circle ${emp.semaforo}`}></div>
