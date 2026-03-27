@@ -41,6 +41,7 @@ export default function DetailView() {
       <div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px"}}>
         <div>
           <h1 style={{fontSize: "2rem", fontWeight: "bold", margin: "0 0 8px 0"}}>{data.empresa_nombre}</h1>
+          <div style={{color: "#404b53", fontWeight: 600, fontSize: "0.9rem", marginBottom: "4px"}}>Segmento: {data.segmento}</div>
           <div style={{color: "#4b5563", fontSize: "1.1rem"}}>{data.rubro} • {data.comuna} ({data.zona})</div>
           <div style={{color: "#6b7280", fontSize: "0.95rem", marginTop: "4px", display: "flex", alignItems: "center", gap: "6px"}}>
             <Users size={16}/> Prevencionista a cargo: <strong className="text-gray-800">{data.experto_asignado}</strong>
@@ -61,8 +62,21 @@ export default function DetailView() {
         <div style={{display: "flex", flexDirection: "column", gap: "24px"}}>
           
           <div className="card" style={{backgroundColor: "var(--danger-light)", border: "1px solid var(--danger)", boxShadow: "none"}}>
-            <h2 className="card-title" style={{color: "var(--danger)", margin: "0 0 8px 0"}}>Acción Recomendada: {data.recomendacion}</h2>
-            <p style={{fontSize: "1.05rem", color: "#b91c1c", margin: 0, lineHeight: "1.5"}}>{data.recomendacion_detalle}</p>
+            <h2 className="card-title" style={{color: "var(--danger)", margin: "0 0 12px 0", display: "flex", alignItems: "center", gap: "10px"}}>
+              <AlertTriangle size={20} />
+              Recomendación: {data.recomendacion}
+            </h2>
+            <p style={{fontSize: "1.05rem", color: "#b91c1c", margin: "0 0 16px 0", lineHeight: "1.5", fontWeight: 500}}>
+              {data.recomendacion_detalle}
+            </p>
+            <div style={{fontSize: "0.85rem", color: "#991b1b", borderTop: "1px solid rgba(255, 116, 102, 0.3)", paddingTop: "12px"}}>
+              <strong>Factores Críticos Detectados:</strong>
+              <ul className="mt-2 space-y-1">
+                {data.top_factores_riesgo.map((f, i) => (
+                  <li key={i} className="flex gap-2"><span>•</span> {f}</li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           <div className="card" style={{flex: 1}}>
@@ -109,15 +123,36 @@ export default function DetailView() {
           <div className="card">
             <h2 className="card-title" style={{display: "flex", alignItems: "center", gap: "8px"}}>
               <AlertTriangle size={20} color="var(--danger)" />
-              Top Factores Activos
+              Detalle de Factores de Riesgo
             </h2>
-            <ul style={{listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px"}}>
-              {data.top_factores_riesgo.map((f, i) => (
-                <li key={i} style={{backgroundColor: "#f9fafb", padding: "10px 14px", borderRadius: "8px", borderLeft: "3px solid var(--danger)", fontSize: "0.95rem"}}>
-                  {f}
-                </li>
-              ))}
-            </ul>
+            <div className="space-y-3">
+               <div className="flex justify-between items-center bg-gray-50 p-3 rounded">
+                 <span className="text-sm">Hallazgos Abiertos (x1000 trab)</span>
+                 <span className="font-bold">{(data.metricas.hallazgos_abiertos / data.dotacion * 1000).toFixed(1)}</span>
+               </div>
+               <div className="flex justify-between items-center bg-gray-50 p-3 rounded">
+                 <span className="text-sm">Días sin Capacitación (+90 penaliza)</span>
+                 <span className={`font-bold ${data.metricas.dias_sin_capacitacion > 90 ? 'text-red-600' : ''}`}>{data.metricas.dias_sin_capacitacion}</span>
+               </div>
+               <div className="flex justify-between items-center bg-gray-50 p-3 rounded">
+                 <span className="text-sm">Accidentabilidad 12M</span>
+                 <span className="font-bold">{data.metricas.accidentabilidad}%</span>
+               </div>
+               <div className="flex justify-between items-center bg-gray-50 p-3 rounded">
+                 <span className="text-sm">Señales Críticas NLP</span>
+                 <span className="font-bold">{data.nlp_detail.n_criticos} alertas</span>
+               </div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <h3 className="text-xs font-bold uppercase text-gray-400 mb-2">Comentarios destacados</h3>
+              <ul style={{listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px"}}>
+                {data.top_factores_riesgo.map((f, i) => (
+                  <li key={i} style={{backgroundColor: "#f9fafb", padding: "10px 14px", borderRadius: "8px", borderLeft: "3px solid var(--danger)", fontSize: "0.85rem"}}>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
           
         </div>

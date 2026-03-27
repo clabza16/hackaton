@@ -1,0 +1,20 @@
+{
+    "layers": {
+        "ml": 27,
+        "operacional": 38,
+        "nlp": 11,
+        "contextual": 24
+    },
+    "operacional": {
+        "hallazgos": 0.4,
+        "capacitacion": 0.2,
+        "visita": 0.2,
+        "accidentabilidad": 0.2
+    },
+    "contextual": {
+        "alerta": 0.4,
+        "evento": 0.2,
+        "congestion": 0.2,
+        "lluvia": 0.2
+    }
+}

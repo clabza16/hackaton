@@ -1,13 +1,13 @@
 empresa_id,contacto_nombre,contacto_email,contacto_telefono,zona
-1,Juan Pérez,jperez@mineriacordillera.cl,+56912345678,Norte
-2,María Silva,msilva@bodegacentral.cl,+56923456789,Centro
-3,Carlos Díaz,cdiaz@constructorandina.cl,+56934567890,Sur
-4,Ana Torres,atorres@agrovalleverde.cl,+56945678901,Centro
-5,Luis Rojas,lrojas@obrasmapocho.cl,+56956789012,Metropolitana
-6,Sofía Castro,scastro@rutasur.cl,+56967890123,Sur
-7,Jorge Pinto,jpinto@pacifico.cl,+56978901234,Centro
-8,Carmen Reyes,creyes@clinicaoriente.cl,+56989012345,Metropolitana
-9,Roberto Tapia,rtapia@metalrenca.cl,+56990123456,Metropolitana
-10,Julia Soto,jsoto@maestranza.cl,+56901234567,Norte
-11,Pedro Vargas,pvargas@transporteselena.cl,+56911223344,Centro
-12,Rosa Medina,rmedina@clinicalaboralnorte.cl,+56922334455,Norte
+101,Carlos Díaz,cdiaz@constructorandina.cl,+56934567890,Santiago
+102,Roberto Tapia,rtapia@metalrenca.cl,+56990123456,Renca
+103,Sofía Castro,scastro@rutasur.cl,+56967890123,San Bernardo
+104,Carmen Reyes,creyes@clinicaoriente.cl,+56989012345,Providencia
+105,Ana Torres,atorres@agrovalleverde.cl,+56945678901,Paine
+106,Juan Pérez,jperez@mineriacordillera.cl,+56912345678,Las Condes
+107,María Silva,msilva@bodegacentral.cl,+56923456789,Quilicura
+108,Luis Rojas,lrojas@obrasmapocho.cl,+56956789012,Maipú
+109,Jorge Pinto,jpinto@pacifico.cl,+56978901234,Centro
+110,Julia Soto,jsoto@maestranza.cl,+56901234567,Norte
+111,Pedro Vargas,pvargas@transporteselena.cl,+56911223344,Centro
+112,Rosa Medina,rmedina@clinicalaboralnorte.cl,+56922334455,Norte

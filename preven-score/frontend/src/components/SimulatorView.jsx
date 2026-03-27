@@ -82,10 +82,10 @@ export default function SimulatorView() {
           
           <div style={{marginBottom: "24px", background: "#f9fafb", padding: "16px", borderRadius: "8px", border: "1px solid #e5e7eb"}}>
             <label style={{display: "flex", justifyContent: "space-between", marginBottom: "4px", fontWeight: "bold"}}>
-              <span>📋 Hallazgos Abiertos Simunlados</span>
+              <span>📋 Hallazgos Abiertos Simulados</span>
               <span className="text-blue-600 font-bold">{params.hallazgos === "" ? "Usando Realidad" : params.hallazgos}</span>
             </label>
-            <p className="text-xs text-gray-500 mb-2 flex items-center gap-1"><Info size={12}/> Cantidad de hallazgos operacionales pendientes por cierre.</p>
+            <p className="text-xs text-gray-500 mb-2 flex items-center gap-1" title="Cantidad de brechas de seguridad detectadas en inspecciones que aún no han sido cerradas formalmente. Un valor alto incrementa significativamente el riesgo operacional."><Info size={12}/> Cantidad de hallazgos operacionales pendientes por cierre.</p>
             <input 
               type="range" min="0" max="50" 
               value={params.hallazgos === "" ? (actualEmp?.metricas?.hallazgos_abiertos || 0) : params.hallazgos} 
@@ -99,7 +99,7 @@ export default function SimulatorView() {
               <span>🎓 Días sin Capacitación Simulados</span>
               <span className="text-blue-600 font-bold">{params.dias_cap === "" ? "Usando Realidad" : params.dias_cap}</span>
             </label>
-            <p className="text-xs text-gray-500 mb-2 flex items-center gap-1"><Info size={12}/> Días continuos sin entrenar trabajadores (+90 es penalizante).</p>
+            <p className="text-xs text-gray-500 mb-2 flex items-center gap-1" title="Días transcurridos desde el último taller preventivo. Según norma ACHS, superar los 90 días sin capacitación es un factor de riesgo crítico."><Info size={12}/> Días continuos sin entrenar trabajadores (+90 es penalizante).</p>
             <input 
               type="range" min="0" max="365" 
               value={params.dias_cap === "" ? (actualEmp?.metricas?.dias_sin_capacitacion || 0) : params.dias_cap} 

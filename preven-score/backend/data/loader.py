@@ -58,59 +58,61 @@ def _normalize_congestion(val: str) -> str:
 def load_empresas() -> pd.DataFrame:
     """Load and normalize empresas_riesgo_historico_v2.csv."""
     path = os.path.join(DATASETS_DIR, "empresas_riesgo_historico_v2.csv")
-    df = pd.read_csv(path, encoding="utf-8")
+    # Using utf-8-sig to handle optional BOM
+    try:
+        df = pd.read_csv(path, encoding="utf-8-sig")
+    except UnicodeDecodeError:
+        df = pd.read_csv(path, encoding="latin-1")
 
-    # Normalize turno_critico → si/no
-    df["turno_critico"] = df["turno_critico"].apply(_normalize_si_no)
-
-    # Normalize evento_masivo_zona → si/no
-    df["evento_masivo_zona"] = df["evento_masivo_zona"].apply(_normalize_si_no)
-
-    # Normalize alerta_meteorologica → si/no
-    df["alerta_meteorologica"] = df["alerta_meteorologica"].apply(_normalize_si_no)
-
-    # Normalize temporada_alta → si/no
-    df["temporada_alta"] = df["temporada_alta"].apply(_normalize_si_no)
+    # Normalize boolean-like columns
+    for col in ["turno_critico", "evento_masivo_zona", "alerta_meteorologica", "temporada_alta"]:
+        if col in df.columns:
+            df[col] = df[col].apply(_normalize_si_no)
 
     # Normalize congestion_operacional
-    df["congestion_operacional"] = df["congestion_operacional"].apply(_normalize_congestion)
+    if "congestion_operacional" in df.columns:
+        df["congestion_operacional"] = df["congestion_operacional"].apply(_normalize_congestion)
 
     # Fill NaN in dias_desde_ultima_capacitacion with median
-    median_cap = df["dias_desde_ultima_capacitacion"].median()
-    df["dias_desde_ultima_capacitacion"] = df["dias_desde_ultima_capacitacion"].fillna(median_cap)
+    if "dias_desde_ultima_capacitacion" in df.columns:
+        median_cap = df["dias_desde_ultima_capacitacion"].median()
+        df["dias_desde_ultima_capacitacion"] = df["dias_desde_ultima_capacitacion"].fillna(median_cap)
 
     # Parse fecha
     df["fecha"] = pd.to_datetime(df["fecha"], errors="coerce")
 
-    # Normalize rubro: fix encoding
-    rubro_map = {
-        "Construcci\ufffd\ufffdn": "Construcción",
-        "Construcci?n": "Construcción",
-        "Transporte y Log\ufffd\ufffdstica": "Transporte y Logística",
-        "Transporte y Log?stica": "Transporte y Logística",
-        "Miner\ufffd\ufffda": "Minería",
-        "Miner?a": "Minería",
-        "Almacenamiento": "Almacenamiento",
-        "Manufactura": "Manufactura",
-        "Salud": "Salud",
-        "Agroindustria": "Agroindustria",
-        "Mantenimiento Industrial": "Mantenimiento Industrial",
-    }
-    df["rubro"] = df["rubro"].replace(rubro_map)
-    # Fix any remaining encoding issues (no-op as pandas with utf8 should be fine)
-    pass
+    def clean_text(text):
+        if not isinstance(text, str): return text
+        # Replace common broken patterns
+        text = text.replace('Construcci\ufffd\ufffdn', 'Construcción')
+        text = text.replace('Construcci?n', 'Construcción')
+        text = text.replace('Log\ufffd\ufffdstica', 'Logística')
+        text = text.replace('Log?stica', 'Logística')
+        text = text.replace('Miner\ufffd\ufffdría', 'Minería')
+        text = text.replace('Miner\ufffd\ufffda', 'Minería')
+        text = text.replace('Miner?a', 'Minería')
+        text = text.replace('Metal\ufffd\ufffdrgica', 'Metalúrgica')
+        text = text.replace('Metal?rgica', 'Metalúrgica')
+        text = text.replace('Cl\ufffd\ufffdnica', 'Clínica')
+        text = text.replace('Cl?nica', 'Clínica')
+        text = text.replace('Pac\ufffd\ufffdfico', 'Pacífico')
+        text = text.replace('Pac?fico', 'Pacífico')
+        return text.strip()
 
+    df["rubro"] = df["rubro"].apply(clean_text)
+    
     def fix_nombre(n):
         if not isinstance(n, str): return n
+        n = clean_text(n)
         if "Andina" in n: return "Constructora Andina"
         if "Valle Verde" in n: return "Agroindustrial Valle Verde"
         if "Mapocho" in n: return "Obras Civiles Mapocho"
-        if "Ruta Sur" in n or "Log" in n and "Sur" in n: return "Logística Ruta Sur"
-        if "Pac" in n and "fico" in n: return "Planta Envases Pacífico"
+        if "Ruta Sur" in n: return "Logística Ruta Sur"
+        if "Pacífico" in n or "Pac?fico" in n: return "Planta Envases Pacífico"
         if "Oriente" in n: return "Servicios Clínicos Oriente"
         if "Renca" in n: return "Metalúrgica Renca"
         if "Maestranza" in n: return "Centro Operativo Maestranza"
-        if "Santa Elena" in n or "Elena" in n: return "Transportes Santa Elena"
+        if "Santa Elena" in n: return "Transportes Santa Elena"
         if "Norte" in n: return "Clínica Laboral Norte"
         if "Express" in n: return "Bodega Central Express"
         if "Cordillera" in n: return "Minería Cordillera"
@@ -119,7 +121,8 @@ def load_empresas() -> pd.DataFrame:
     df["empresa_nombre"] = df["empresa_nombre"].apply(fix_nombre)
     
     for col in ["comuna", "region"]:
-        df[col] = df[col].astype(str).replace("nan", "")
+        if col in df.columns:
+            df[col] = df[col].astype(str).replace("nan", "").apply(clean_text)
 
     return df
 
@@ -129,19 +132,12 @@ def load_comentarios() -> pd.DataFrame:
     path = os.path.join(DATASETS_DIR, "comentarios_inspecciones.xlsx")
     df = pd.read_excel(path, skiprows=2, engine="openpyxl")
 
-    # Text should be fine since it's read by openpyxl natively.
+    def clean_text(text):
+        if not isinstance(text, str): return text
+        return text.replace('Cr\ufffd\ufffdtico', 'Crítico').replace('Cr?tico', 'Crítico').replace('Cr\ufffdtico', 'Crítico').strip()
 
-    # Normalize severidad: Crítico/Medio/Bajo
-    sev_map = {
-        "Cr\ufffd\ufffdtico": "Crítico",
-        "Cr?tico": "Crítico",
-        "Cr\ufffdtico": "Crítico",
-        "Critico": "Crítico",
-        "Crítico": "Crítico",
-        "Medio": "Medio",
-        "Bajo": "Bajo",
-    }
-    df["severidad_referencial"] = df["severidad_referencial"].replace(sev_map)
+    df["severidad_referencial"] = df["severidad_referencial"].apply(clean_text)
+    df["observation_text"] = df["observation_text"].apply(clean_text)
 
     return df
 
